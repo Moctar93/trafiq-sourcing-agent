@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: trafiq_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: trafiq_db
+      MYSQL_USER: trafiq_user
+      MYSQL_PASSWORD: trafiq_password
+      MSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    container_name: trafiq_backend
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=trafiq_db
+      - DB_USER=trafiq_user
+      - DB_PASSWORD=trafiq_password
+      - DB_HOST=db
+      - DB_PORT=3306
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: trafiq_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data
+

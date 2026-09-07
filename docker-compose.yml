@@ -1,13 +1,15 @@
+version: '3.8'
+
 services:
   db:
     image: mysql:8.0
     container_name: trafiq_db
     restart: always
     environment:
-      MYSQL_DATABASE: trafiq_db
-      MYSQL_USER: trafiq_user
-      MYSQL_PASSWORD: trafiq_password
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-trafiq_db}
+      MYSQL_USER: ${MYSQL_USER:-trafiq_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-trafiq_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
     ports:
       - "3306:3306"
     volumes:
@@ -16,28 +18,42 @@ services:
   backend:
     build: ./backend
     container_name: trafiq_backend
+    restart: always
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
     environment:
       - DB_HOST=db
-      - DB_NAME=trafiq_db
-      - DB_USER=trafiq_user
-      - DB_PASSWORD=trafiq_password
+      - DB_NAME=${MYSQL_DATABASE:-trafiq_db}
+      - DB_USER=${MYSQL_USER:-trafiq_user}
+      - DB_PASSWORD=${MYSQL_PASSWORD:-trafiq_password}
     depends_on:
       - db
+    volumes:
+      - ./backend:/app
 
   frontend:
     build: ./frontend
     container_name: trafiq_frontend
+    restart: always
     ports:
       - "5173:5173"
+    depends_on:
+      - backend
     volumes:
       - ./frontend:/app
       - /app/node_modules
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: trafiq_phpmyadmin
+    restart: always
+    ports:
+      - "8085:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
     depends_on:
-      - backend
+      - db
 
 volumes:
   mysql_data:

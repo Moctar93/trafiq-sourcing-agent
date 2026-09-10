@@ -1,4 +1,6 @@
 from rest_framework import viewsets, permissions, status
+from rest_framework.permissions import AllowAny
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from sourcing.models import User, Company, SourceProfile, ModelVersion, Signal, Contact, Campaign, Activity, ProspectScore
@@ -22,9 +24,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
+    queryset = Company.objects.all().order_by('-created_at')
     serializer_class = CompanySerializer
+    permission_classes = [AllowAny] # Permet la lecture temporaire sans token pour le dev
 
 class SourceProfileViewSet(viewsets.ModelViewSet):
     queryset = SourceProfile.objects.all()

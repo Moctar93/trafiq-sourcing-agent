@@ -1,0 +1,128 @@
+[
+  {
+    "model": "sourcing.company",
+    "pk": 1,
+    "fields": {
+      "name": "DataScale",
+      "sector": "SaaS / Data",
+      "employee_count": 50,
+      "created_at": "2026-09-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.company",
+    "pk": 2,
+    "fields": {
+      "name": "Nimbus Cloud",
+      "sector": "Infra Cloud",
+      "employee_count": 120,
+      "created_at": "2026-09-02T11:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.company",
+    "pk": 3,
+    "fields": {
+      "name": "Veridian",
+      "sector": "ClimateTech",
+      "employee_count": 30,
+      "created_at": "2026-09-03T09:30:00Z"
+    }
+  },
+  {
+    "model": "sourcing.company",
+    "pk": 4,
+    "fields": {
+      "name": "Orbit Labs",
+      "sector": "IA / ML",
+      "employee_count": 80,
+      "created_at": "2026-09-04T14:15:00Z"
+    }
+  },
+  {
+    "model": "sourcing.company",
+    "pk": 5,
+    "fields": {
+      "name": "Pulseway",
+      "sector": "DevOps",
+      "employee_count": 200,
+      "created_at": "2026-09-05T16:20:00Z"
+    }
+  },
+  {
+    "model": "sourcing.company",
+    "pk": 6,
+    "fields": {
+      "name": "Lumen Health",
+      "sector": "MedTech",
+      "employee_count": 45,
+      "created_at": "2026-09-06T08:45:00Z"
+    }
+  },
+  {
+    "model": "sourcing.signal",
+    "pk": 1,
+    "fields": {
+      "company": 1,
+      "signal_type": "Levée de fonds",
+      "value": "Série B de 15M€",
+      "source": "Crunchbase",
+      "detected_at": "2026-09-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.signal",
+    "pk": 2,
+    "fields": {
+      "company": 2,
+      "signal_type": "Recrutement",
+      "value": "Recrute 15 SDR",
+      "source": "LinkedIn",
+      "detected_at": "2026-09-02T11:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.signal",
+    "pk": 3,
+    "fields": {
+      "company": 3,
+      "signal_type": "Nomination",
+      "value": "Nouveau CTO nommé",
+      "source": "Press Release",
+      "detected_at": "2026-09-03T09:30:00Z"
+    }
+  },
+  {
+    "model": "sourcing.signal",
+    "pk": 4,
+    "fields": {
+      "company": 4,
+      "signal_type": "Croissance",
+      "value": "Expansion EU",
+      "source": "Corporate Blog",
+      "detected_at": "2026-09-04T14:15:00Z"
+    }
+  },
+  {
+    "model": "sourcing.signal",
+    "pk": 5,
+    "fields": {
+      "company": 5,
+      "signal_type": "Management",
+      "value": "Changement CEO",
+      "source": "LinkedIn",
+      "detected_at": "2026-09-05T16:20:00Z"
+    }
+  },
+  {
+    "model": "sourcing.signal",
+    "pk": 6,
+    "fields": {
+      "company": 6,
+      "signal_type": "Partenariat",
+      "value": "Partenariat commercial majeur",
+      "source": "Press Release",
+      "detected_at": "2026-09-06T08:45:00Z"
+    }
+  }
+]

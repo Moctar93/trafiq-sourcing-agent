@@ -25,16 +25,26 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
+class SignalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Signal
+        fields = ['id_signal', 'signal_type', 'value', 'source', 'detected_at']
+
 class CompanySerializer(serializers.ModelSerializer):
+    signals = SignalSerializer(many=True, read_only=True)
+    latest_signal = serializers.SerializerMethodField()
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = ['id_company', 'name', 'website', 'sector', 'employee_count', 'created_at', 'signals', 'latest_signal' ]
 
     def validate_employee_count(self, value):
         if value < 0:
             raise serializers.ValidationError("Le nombre d'employés ne peut pas être négatif.")
         return value
 
+    def get_latest_signal(self, obj):
+        latest = obj.signals.order_by('-detected_at').first()
+        return latest.value if latest else "Aucun signal"
 class SourceProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SourceProfile
@@ -43,11 +53,6 @@ class SourceProfileSerializer(serializers.ModelSerializer):
 class ModelVersionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModelVersion
-        fields = '__all__'
-
-class SignalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Signal
         fields = '__all__'
 
 class ContactSerializer(serializers.ModelSerializer):

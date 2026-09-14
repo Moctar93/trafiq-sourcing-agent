@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // MODIFICATION 1 : Ajout de Loader2 pour l'indicateur de chargement
 import { Users, Gauge, Zap, Search, Filter, ExternalLink, ArrowUpRight, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -154,10 +155,12 @@ export default function Dashboard() {
                     <td className="py-3.5 px-4 text-slate-600 font-medium">{item.employee_count} sal.</td>
                     <td className="py-3.5 px-4 text-slate-600 font-medium">{item.latest_signal}</td>
                     <td className="py-3.5 px-6 text-right">
-                      <button className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors">
+                      <Link
+                      to={`/prospects/${item.id_company}`}
+                      >
                         <span>Détails</span>
-                        <ExternalLink className="w-3 h-3 text-slate-400" />
-                      </button>
+                        <ExternalLink className='w-3 h-3 text-slate-400' />
+                      </Link>
                     </td>
                   </tr>
                 ))}

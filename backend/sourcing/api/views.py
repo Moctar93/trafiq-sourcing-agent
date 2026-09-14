@@ -26,7 +26,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all().order_by('-created_at')
+    # Optimisation SQL : prefetch_related précharge les signaux, contacts et scores
+    queryset = Company.objects.all().prefetch_related('signals', 'contacts', 'scores').order_by('-created_at')
     serializer_class = CompanySerializer
     permission_classes = [AllowAny] # Permet la lecture temporaire sans token pour le dev
 

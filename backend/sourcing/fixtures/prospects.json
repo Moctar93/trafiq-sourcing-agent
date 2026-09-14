@@ -1,9 +1,30 @@
 [
   {
+    "model": "sourcing.sourceprofile",
+    "pk": 1,
+    "fields": {
+      "name": "Profil Général B2B",
+      "target_sectors": "SaaS, Cloud, IA, MedTech",
+      "min_employees": 10,
+      "max_employees": 500,
+      "created_at": "2026-09-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.modelversion",
+    "pk": 1,
+    "fields": {
+      "version_code": "v1.0.0",
+      "description": "Modèle de scoring Sourcing IA V1",
+      "created_at": "2026-09-01T10:00:00Z"
+    }
+  },
+  {
     "model": "sourcing.company",
     "pk": 1,
     "fields": {
       "name": "DataScale",
+      "website": "https://datascale.io",
       "sector": "SaaS / Data",
       "employee_count": 50,
       "created_at": "2026-09-01T10:00:00Z"
@@ -14,6 +35,7 @@
     "pk": 2,
     "fields": {
       "name": "Nimbus Cloud",
+      "website": "https://nimbuscloud.com",
       "sector": "Infra Cloud",
       "employee_count": 120,
       "created_at": "2026-09-02T11:00:00Z"
@@ -24,6 +46,7 @@
     "pk": 3,
     "fields": {
       "name": "Veridian",
+      "website": "https://veridian.green",
       "sector": "ClimateTech",
       "employee_count": 30,
       "created_at": "2026-09-03T09:30:00Z"
@@ -34,6 +57,7 @@
     "pk": 4,
     "fields": {
       "name": "Orbit Labs",
+      "website": "https://orbitlabs.ai",
       "sector": "IA / ML",
       "employee_count": 80,
       "created_at": "2026-09-04T14:15:00Z"
@@ -44,6 +68,7 @@
     "pk": 5,
     "fields": {
       "name": "Pulseway",
+      "website": "https://pulseway.com",
       "sector": "DevOps",
       "employee_count": 200,
       "created_at": "2026-09-05T16:20:00Z"
@@ -54,6 +79,7 @@
     "pk": 6,
     "fields": {
       "name": "Lumen Health",
+      "website": "https://lumenhealth.com",
       "sector": "MedTech",
       "employee_count": 45,
       "created_at": "2026-09-06T08:45:00Z"
@@ -123,6 +149,210 @@
       "value": "Partenariat commercial majeur",
       "source": "Press Release",
       "detected_at": "2026-09-06T08:45:00Z"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 1,
+    "fields": {
+      "company": 1,
+      "first_name": "Marc",
+      "last_name": "Dubois",
+      "position": "VP Engineering",
+      "email": "m.dubois@datascale.io",
+      "linkedin_url": "https://linkedin.com/in/marcdubois"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 2,
+    "fields": {
+      "company": 1,
+      "first_name": "Claire",
+      "last_name": "Lemoine",
+      "position": "Head of Data",
+      "email": "c.lemoine@datascale.io",
+      "linkedin_url": "https://linkedin.com/in/clairelemoine"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 3,
+    "fields": {
+      "company": 2,
+      "first_name": "Julien",
+      "last_name": "Moreau",
+      "position": "Chief Revenue Officer",
+      "email": "j.moreau@nimbuscloud.com",
+      "linkedin_url": "https://linkedin.com/in/julienmoreau"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 4,
+    "fields": {
+      "company": 3,
+      "first_name": "Élodie",
+      "last_name": "Roux",
+      "position": "CTO",
+      "email": "e.roux@veridian.green",
+      "linkedin_url": "https://linkedin.com/in/elodieroux"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 5,
+    "fields": {
+      "company": 4,
+      "first_name": "Thomas",
+      "last_name": "Bernard",
+      "position": "Head of AI",
+      "email": "t.bernard@orbitlabs.ai",
+      "linkedin_url": "https://linkedin.com/in/thomasbernard"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 6,
+    "fields": {
+      "company": 4,
+      "first_name": "Sophie",
+      "last_name": "Martin",
+      "position": "DRH",
+      "email": "s.martin@orbitlabs.ai",
+      "linkedin_url": "https://linkedin.com/in/sophiemartin"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 7,
+    "fields": {
+      "company": 5,
+      "first_name": "Alexandre",
+      "last_name": "Garnier",
+      "position": "CEO",
+      "email": "a.garnier@pulseway.com",
+      "linkedin_url": "https://linkedin.com/in/alexandregarnier"
+    }
+  },
+  {
+    "model": "sourcing.contact",
+    "pk": 8,
+    "fields": {
+      "company": 6,
+      "first_name": "Camille",
+      "last_name": "Fontaine",
+      "position": "Directrice Développement",
+      "email": "c.fontaine@lumenhealth.com",
+      "linkedin_url": "https://linkedin.com/in/camillefontaine"
+    }
+  },
+  {
+    "model": "sourcing.prospectscore",
+    "pk": 1,
+    "fields": {
+      "company": 1,
+      "model": 1,
+      "profile": 1,
+      "fit_score": 90.0,
+      "need_score": 95.0,
+      "intent_score": 90.0,
+      "opportunity_score": 93.0,
+      "final_score": 92.0,
+      "confidence": 0.88,
+      "explanation": "Levée de fonds récente de 15M€ indiquant un budget d'investissement élevé et un besoin d'accélération commerciale.",
+      "model_version": "v1.0.0",
+      "updated_at": "2026-09-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.prospectscore",
+    "pk": 2,
+    "fields": {
+      "company": 2,
+      "model": 1,
+      "profile": 1,
+      "fit_score": 85.0,
+      "need_score": 88.0,
+      "intent_score": 82.0,
+      "opportunity_score": 87.0,
+      "final_score": 85.5,
+      "confidence": 0.82,
+      "explanation": "Recrutement massif de SDR en cours, signal fort d'une restructuration de l'équipe commerciale.",
+      "model_version": "v1.0.0",
+      "updated_at": "2026-09-02T11:00:00Z"
+    }
+  },
+  {
+    "model": "sourcing.prospectscore",
+    "pk": 3,
+    "fields": {
+      "company": 3,
+      "model": 1,
+      "profile": 1,
+      "fit_score": 75.0,
+      "need_score": 80.0,
+      "intent_score": 78.0,
+      "opportunity_score": 79.0,
+      "final_score": 78.0,
+      "confidence": 0.75,
+      "explanation": "Arrivée d'un nouveau CTO, timing opportun pour proposer de nouveaux outils techniques.",
+      "model_version": "v1.0.0",
+      "updated_at": "2026-09-03T09:30:00Z"
+    }
+  },
+  {
+    "model": "sourcing.prospectscore",
+    "pk": 4,
+    "fields": {
+      "company": 4,
+      "model": 1,
+      "profile": 1,
+      "fit_score": 88.0,
+      "need_score": 90.0,
+      "intent_score": 85.0,
+      "opportunity_score": 89.0,
+      "final_score": 88.0,
+      "confidence": 0.85,
+      "explanation": "Forte expansion sur le marché européen avec un intérêt marqué pour les architectures IA/ML modernes.",
+      "model_version": "v1.0.0",
+      "updated_at": "2026-09-04T14:15:00Z"
+    }
+  },
+  {
+    "model": "sourcing.prospectscore",
+    "pk": 5,
+    "fields": {
+      "company": 5,
+      "model": 1,
+      "profile": 1,
+      "fit_score": 60.0,
+      "need_score": 65.0,
+      "intent_score": 68.0,
+      "opportunity_score": 63.0,
+      "final_score": 64.0,
+      "confidence": 0.65,
+      "explanation": "Changement de CEO récent. Phase de transition organisationnelle en cours.",
+      "model_version": "v1.0.0",
+      "updated_at": "2026-09-05T16:20:00Z"
+    }
+  },
+  {
+    "model": "sourcing.prospectscore",
+    "pk": 6,
+    "fields": {
+      "company": 6,
+      "model": 1,
+      "profile": 1,
+      "fit_score": 70.0,
+      "need_score": 76.0,
+      "intent_score": 74.0,
+      "opportunity_score": 74.0,
+      "final_score": 73.5,
+      "confidence": 0.72,
+      "explanation": "Signature d'un partenariat majeur ouvrant de nouvelles opportunités de croissance.",
+      "model_version": "v1.0.0",
+      "updated_at": "2026-09-06T08:45:00Z"
     }
   }
 ]

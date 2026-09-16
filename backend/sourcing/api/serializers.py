@@ -69,7 +69,12 @@ class CompanySerializer(serializers.ModelSerializer):
 class SourceProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SourceProfile
-        fields = '__all__'
+        fields = [
+            'id_profile', 'name', 'region', 'target_sectors',
+            'min_employees', 'max_employees',
+            'fit_weight', 'need_weight', 'intent_weight', 'created_at'
+        ]
+        read_only_fields = ['id_profile', 'created_at']
 
 class ModelVersionSerializer(serializers.ModelSerializer):
     class Meta:

@@ -5,10 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from sourcing.models import User, Company, SourceProfile, ModelVersion, Signal, Contact, Campaign, Activity, ProspectScore
 from .serializers import (
-    UserSerializer, RegisterSerializer, CompanySerializer, SourceProfileSerializer, 
-    ModelVersionSerializer, SignalSerializer, ContactSerializer, 
+    UserSerializer, RegisterSerializer, CompanySerializer, SourceProfileSerializer,
+    ModelVersionSerializer, SignalSerializer, ContactSerializer,
     CampaignSerializer, ActivitySerializer, ProspectScoreSerializer
 )
+
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -20,6 +21,7 @@ class RegisterView(APIView):
             return Response({"message": "Utilisateur créé avec succès"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -27,33 +29,43 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CompanyViewSet(viewsets.ModelViewSet):
     # Optimisation SQL : prefetch_related précharge les signaux, contacts et scores
-    queryset = Company.objects.all().prefetch_related('signals', 'contacts', 'scores').order_by('-created_at')
+    queryset = Company.objects.all().prefetch_related(
+        'signals', 'contacts', 'scores').order_by('-created_at')
     serializer_class = CompanySerializer
-    permission_classes = [AllowAny] # Permet la lecture temporaire sans token pour le dev
+    # Permet la lecture temporaire sans token pour le dev
+    permission_classes = [AllowAny]
+
 
 class SourceProfileViewSet(viewsets.ModelViewSet):
     queryset = SourceProfile.objects.all()
     serializer_class = SourceProfileSerializer
+    permission_classes = [AllowAny]
+
 
 class ModelVersionViewSet(viewsets.ModelViewSet):
     queryset = ModelVersion.objects.all()
     serializer_class = ModelVersionSerializer
 
+
 class SignalViewSet(viewsets.ModelViewSet):
     queryset = Signal.objects.all()
     serializer_class = SignalSerializer
+
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
+
 class CampaignViewSet(viewsets.ModelViewSet):
     queryset = Campaign.objects.all()
     serializer_class = CampaignSerializer
 
+
 class ActivityViewSet(viewsets.ModelViewSet):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
+
 
 class ProspectScoreViewSet(viewsets.ModelViewSet):
     queryset = ProspectScore.objects.all()

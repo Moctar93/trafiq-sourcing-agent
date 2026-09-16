@@ -37,9 +37,17 @@ class Company(models.Model):
 class SourceProfile(models.Model):
     id_profile = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
+    region = models.CharField(max_length=100, blank=True, null=True, default='Île-de-France')
     target_sectors = models.TextField(blank=True, null=True)
-    min_employees = models.IntegerField(default=0)
-    max_employees = models.IntegerField(default=0)
+    min_employees = models.IntegerField(default=10)
+    max_employees = models.IntegerField(default=500)
+    
+
+    # Pids pour l'algorithme de scoring (en %)
+    fit_weight = models.IntegerField(default=50)
+    need_weight = models.IntegerField(default=50)
+    intent_weight = models.IntegerField(default=50)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

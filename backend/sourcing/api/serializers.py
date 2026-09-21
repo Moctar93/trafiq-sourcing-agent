@@ -90,3 +90,9 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = '__all__'
+
+class ProspectImportSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=255)
+    website = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    status = serializers.CharField(max_length=50, required=False)
+    action = serializers.CharField(max_length=50, default='Conserver')

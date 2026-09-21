@@ -7,9 +7,55 @@ from sourcing.models import User, Company, SourceProfile, ModelVersion, Signal, 
 from .serializers import (
     UserSerializer, RegisterSerializer, CompanySerializer, SourceProfileSerializer,
     ModelVersionSerializer, SignalSerializer, ContactSerializer,
-    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer
+    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer
 )
 
+class ImportProspectsView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        prospects_data = request.data.get('prospects', [])
+        
+        # 1. Validation des données entrantes avec le Serializer
+        serializer = ProspectImportSerializer(data=prospects_data, many=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        created_count = 0
+        updated_count = 0
+
+        # 2. Utilisation des données validées
+        for item in serializer.validated_data:
+            name = item.get('name')
+            raw_website = item.get('website', '').strip()
+            action = item.get('action', 'Conserver')
+
+            if not name:
+                continue
+
+            clean_website = raw_website.replace('https://', '').replace('http://', '').strip('/')
+            
+            # Recherche en base
+            company = Company.objects.filter(website__icontains=clean_website).first() if clean_website else None
+
+            if company:
+                if action == 'Fusionner':
+                    company.name = name
+                    company.save()
+                    updated_count += 1
+            else:
+                formatted_website = f"https://{clean_website}" if clean_website and not clean_website.startswith('http') else clean_website
+                Company.objects.create(
+                    name=name,
+                    website=formatted_website
+                )
+                created_count += 1
+
+        return Response({
+            "message": "Importation et scoring initialisés.",
+            "created": created_count,
+            "updated": updated_count
+        }, status=status.HTTP_201_CREATED)
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]

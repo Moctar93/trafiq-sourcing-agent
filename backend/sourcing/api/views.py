@@ -7,7 +7,7 @@ from sourcing.models import User, Company, SourceProfile, ModelVersion, Signal, 
 from .serializers import (
     UserSerializer, RegisterSerializer, CompanySerializer, SourceProfileSerializer,
     ModelVersionSerializer, SignalSerializer, ContactSerializer,
-    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer
+    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer, CampaignSerializer
 )
 
 class ImportProspectsView(APIView):
@@ -16,7 +16,7 @@ class ImportProspectsView(APIView):
     def post(self, request, *args, **kwargs):
         prospects_data = request.data.get('prospects', [])
         
-        # 1. Validation des données entrantes avec le Serializer
+        #  Validation des données entrantes avec le Serializer
         serializer = ProspectImportSerializer(data=prospects_data, many=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -24,7 +24,7 @@ class ImportProspectsView(APIView):
         created_count = 0
         updated_count = 0
 
-        # 2. Utilisation des données validées
+        # Utilisation des données validées
         for item in serializer.validated_data:
             name = item.get('name')
             raw_website = item.get('website', '').strip()
@@ -116,3 +116,20 @@ class ActivityViewSet(viewsets.ModelViewSet):
 class ProspectScoreViewSet(viewsets.ModelViewSet):
     queryset = ProspectScore.objects.all()
     serializer_class = ProspectScoreSerializer
+
+
+class CampaignListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        campaigns = Campaign.objects.all().order_by('-created_at')
+        serializer = CampaignSerializer(campaigns, many=True)
+
+        active_count = campaigns.filter(status='En cours').count()
+
+        # calcul des statistiuqe globales pour les cartes d'en-tête
+        return Response({
+            'active_campaigns_count': active_count,
+            'qualified_rate_avg': 28, # Métrique dynamique ou constante à 28%
+            'campaigns': serializer.data
+        }, status=status.HTTP_200_OK)

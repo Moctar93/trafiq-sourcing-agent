@@ -76,7 +76,7 @@ export default function Navbar() {
 
         {/* CTA Button -> Redirige vers la Vue Campagnes */}
         <button 
-          onClick={() => navigate('/campaigns')}
+          onClick={() => navigate('/campaigns/create')}
           className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4 stroke-2" />

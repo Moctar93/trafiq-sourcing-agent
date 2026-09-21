@@ -96,3 +96,10 @@ class ProspectImportSerializer(serializers.Serializer):
     website = serializers.CharField(max_length=255, required=False, allow_blank=True)
     status = serializers.CharField(max_length=50, required=False)
     action = serializers.CharField(max_length=50, default='Conserver')
+
+class CampaignSerializer(serializers.ModelSerializer):
+    profile_name = serializers.CharField(source='profile.name', read_only=True, default='Non défini')
+
+    class Meta:
+        model = Campaign
+        fields = ['id_campaign', 'name', 'status', 'progress', 'created_at', 'profile', 'profile_name'] 

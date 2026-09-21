@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Search, Plus, ChevronDown, Sliders, Upload, PlayCircle, Terminal } from 'lucide-react';
+import { Search, ChevronDown, Sliders, Upload, PlayCircle, Terminal } from 'lucide-react';
+import logoTrafiq from '../../assets/logo-trafiq.jpeg'; // Ajuste le chemin selon ton dossier
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -19,11 +20,17 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <div 
           onClick={() => navigate('/')} 
-          className="flex items-center gap-2 pr-4 border-r border-gray-100 cursor-pointer select-none"
+          className="flex items-center gap-3 pr-4 border-r border-gray-100 cursor-pointer select-none"
         >
-          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-            ◎
+          {/* Logo Trafiq inséré ici */}
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100 shrink-0">
+            <img 
+              src={logoTrafiq} 
+              alt="Trafiq Logo" 
+              className="w-full h-full object-contain p-0.5"
+            />
           </div>
+
           <div className="flex flex-col">
             <span className="font-bold text-gray-900 leading-tight">Trafiq</span>
             <span className="text-xs text-gray-400">Sourcing</span>
@@ -64,7 +71,6 @@ export default function Navbar() {
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-        {/* Search Input */}
         <div className="hidden md:flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-xl text-sm text-gray-500 border border-transparent focus-within:border-blue-500 focus-within:bg-white transition-all">
           <Search className="w-4 h-4 text-gray-400 shrink-0" />
           <input
@@ -73,15 +79,6 @@ export default function Navbar() {
             className="bg-transparent border-none outline-none w-32 xl:w-48 text-gray-700 placeholder-gray-400 text-xs"
           />
         </div>
-
-        {/* CTA Button -> Redirige vers la Vue Campagnes */}
-        <button 
-          onClick={() => navigate('/campaigns/create')}
-          className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer"
-        >
-          <Plus className="w-4 h-4 stroke-2" />
-          <span>Nouvelle Campagne</span>
-        </button>
       </div>
     </header>
   );

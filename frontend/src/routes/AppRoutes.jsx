@@ -6,6 +6,7 @@ import ProspectDetail from '../pages/ProspectDetail';
 import SourcingProfile from '../pages/SourcingProfiles';
 import ImportProspects from '../pages/ImportProspects';
 import Campaigns from '../pages/Campaigns';
+import CreateCampaign from '../pages/CreateCampaign';
 
 export default function AppRoutes() {
     return (
@@ -16,7 +17,8 @@ export default function AppRoutes() {
                 <Route path='/sourcing-profile' element={<SourcingProfile />} />
                 <Route path='/import' element={<ImportProspects />} />
                 <Route path='/campaigns' element={<Campaigns />} />
-                
+                <Route path='/campaigns/create' element={<CreateCampaign />} />
+    
             </Route>
         </Routes>
     )

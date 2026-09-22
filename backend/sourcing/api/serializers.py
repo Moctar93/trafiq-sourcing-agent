@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'first_name', 'last_name', 'role']
 
     def create(self, validated_data):
-        user = User.objects.create_user(
+        return User.objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
             password=validated_data['password'],
@@ -26,7 +26,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name', ''),
             role=validated_data.get('role', 'sdr')
         )
-        return user
 
 class SignalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,10 +80,13 @@ class ModelVersionSerializer(serializers.ModelSerializer):
         model = ModelVersion
         fields = '__all__'
 
+# Unique CampaignSerializer valide
 class CampaignSerializer(serializers.ModelSerializer):
+    profile_name = serializers.CharField(source='profile.name', read_only=True, default='Non défini')
+
     class Meta:
         model = Campaign
-        fields = '__all__'
+        fields = ['id_campaign', 'name', 'status', 'created_at', 'profile', 'profile_name']
 
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -96,10 +98,3 @@ class ProspectImportSerializer(serializers.Serializer):
     website = serializers.CharField(max_length=255, required=False, allow_blank=True)
     status = serializers.CharField(max_length=50, required=False)
     action = serializers.CharField(max_length=50, default='Conserver')
-
-class CampaignSerializer(serializers.ModelSerializer):
-    profile_name = serializers.CharField(source='profile.name', read_only=True, default='Non défini')
-
-    class Meta:
-        model = Campaign
-        fields = ['id_campaign', 'name', 'status', 'progress', 'created_at', 'profile', 'profile_name'] 

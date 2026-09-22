@@ -7,7 +7,7 @@ from sourcing.models import User, Company, SourceProfile, ModelVersion, Signal, 
 from .serializers import (
     UserSerializer, RegisterSerializer, CompanySerializer, SourceProfileSerializer,
     ModelVersionSerializer, SignalSerializer, ContactSerializer,
-    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer, CampaignSerializer
+    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer
 )
 
 class ImportProspectsView(APIView):
@@ -122,14 +122,51 @@ class CampaignListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        campaigns = Campaign.objects.all().order_by('-created_at')
+        campaigns = Campaign.objects.select_related('profile').all().order_by('-created_at')
         serializer = CampaignSerializer(campaigns, many=True)
 
         active_count = campaigns.filter(status='En cours').count()
 
-        # calcul des statistiuqe globales pour les cartes d'en-tête
         return Response({
             'active_campaigns_count': active_count,
-            'qualified_rate_avg': 28, # Métrique dynamique ou constante à 28%
+            'qualified_rate_avg': 28,
             'campaigns': serializer.data
         }, status=status.HTTP_200_OK)
+
+class CreateCampaignView(APIView):
+    permission_classes = [AllowAny]
+
+    # GET: Récupère la liste des profils de sourcing disponibles
+    def get(self, request):
+        profiles = SourceProfile.objects.all().values('id_profile', 'name', 'region')
+        return Response({'profiles': list(profiles)}, status=status.HTTP_200_OK)
+
+    # POST: Crée la nouvelle campagne
+    def post(self, request):
+        name = request.data.get('name')
+        profile_id = request.data.get('profile_id')
+
+        if not name or not profile_id:
+            return Response(
+                {"error": "Le nom de la campagne et le profil sont obligatoires."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            profile = SourceProfile.objects.get(pk=profile_id)
+            campaign = Campaign.objects.create(
+                name=name,
+                profile=profile,
+                status='En cours'
+            )
+            return Response(
+                {
+                    "message": "Campagne créée avec succès",
+                    "id_campaign": campaign.id_campaign,
+                    "name": campaign.name
+                },
+                status=status.HTTP_201_CREATED
+            )
+        except SourceProfile.DoesNotExist:
+            return Response({"error": "Profil de sourcing introuvalble."}, status=status.HTTP_404_NOT_FOUND )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

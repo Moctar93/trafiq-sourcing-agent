@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     RegisterView, UserViewSet, CompanyViewSet, SourceProfileViewSet, 
     ModelVersionViewSet, SignalViewSet, ContactViewSet, 
-    CampaignViewSet, ActivityViewSet, ProspectScoreViewSet, ImportProspectsView, CampaignListView
+    CampaignViewSet, ActivityViewSet, ProspectScoreViewSet, ImportProspectsView, CampaignListView, CreateCampaignView
 )
 
 router = DefaultRouter()
@@ -29,6 +29,7 @@ urlpatterns = [
     
     path('import-prospects/', ImportProspectsView.as_view(), name='import-prospects'),
     path('campaigns/', CampaignListView.as_view(), name='campaign-list'),
+    path('campaigns/create/', CreateCampaignView.as_view(), name='campaign-create'),
 
     # Endpoints CRUD REST
     path('', include(router.urls)),

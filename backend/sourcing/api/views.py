@@ -170,3 +170,33 @@ class CreateCampaignView(APIView):
             return Response({"error": "Profil de sourcing introuvalble."}, status=status.HTTP_404_NOT_FOUND )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class MLPredictView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        company_id = request.data.get('company_id')
+
+        if not company_id:
+            return Response(
+                {"error": "Le paramètre company_id est requis."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Logique d'appel au modèle ML / Scoring
+        # Exemple de payload retourné :
+        prediction_data = {
+            "status": "success",
+            "model_version": "v0.1-mock",
+            "company_id": company_id,
+            "score": 0.87,
+            "confidence": "High",
+            "features_impact": {
+                "sector_match": 0.95,
+                "size_fit": 0.80,
+                "growth_rate": 0.85
+            },
+            "recommendation": "Qualified"
+        }
+
+        return Response(prediction_data, status=status.HTTP_200_OK)

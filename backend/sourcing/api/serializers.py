@@ -98,3 +98,16 @@ class ProspectImportSerializer(serializers.Serializer):
     website = serializers.CharField(max_length=255, required=False, allow_blank=True)
     status = serializers.CharField(max_length=50, required=False)
     action = serializers.CharField(max_length=50, default='Conserver')
+
+
+class MLPredictRequestSerializer(serializers.Serializer):
+    company_id = serializers.IntegerField(required=True, help_text="ID de l'entreprise à évaluer")
+
+class MLPredictResponseSerializer(serializers.Serializer):
+    status = serializers.CharField()
+    model_version = serializers.CharField()
+    company_id = serializers.IntegerField()
+    score = serializers.FloatField()
+    confidence = serializers.CharField()
+    features_impact = serializers.DictField()
+    recommendation = serializers.CharField()

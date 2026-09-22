@@ -147,7 +147,7 @@ export default function ImportProspects() {
               {prospects.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="py-4 pr-4 font-bold text-slate-800">{item.name}</td>
-                  <td className="py-4 px-4 text-slate-500 truncate max-w-[120px] sm:max-w-none">{item.website}</td>
+                  <td className="py-4 px-4 text-slate-500 truncate max-w-30 sm:max-w-none">{item.website}</td>
                   <td className="py-4 px-4 hidden sm:table-cell">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
                       item.status === 'Doublon détecté' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'

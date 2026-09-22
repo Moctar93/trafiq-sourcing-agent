@@ -121,7 +121,7 @@ const Campaigns = () => {
         <h2 className="text-lg font-bold text-slate-900 mb-6">Campagnes</h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[600px]">
+          <table className="w-full text-left border-collapse min-w-150">
             <thead>
               <tr className="text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
                 <th className="pb-3 w-2/5">Nom de la campagne</th>

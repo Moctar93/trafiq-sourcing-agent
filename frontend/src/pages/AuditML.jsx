@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Cpu, Activity, Play, Code2 } from 'lucide-react';
-import api from '../api/axios';
+import React, { useState } from "react";
+import { Cpu, Activity, Play, Code2 } from "lucide-react";
+import api from "../api/axios";
 
 const mockCompanies = [
-  { id: 1, name: 'Logitrans SAS' },
-  { id: 2, name: 'Groupe Bernard' },
-  { id: 3, name: 'Fret Atlantique' },
-  { id: 4, name: 'TransAlpes Cargo' },
+  { id: 1, name: "Logitrans SAS" },
+  { id: 2, name: "Groupe Bernard" },
+  { id: 3, name: "Fret Atlantique" },
+  { id: 4, name: "TransAlpes Cargo" },
 ];
 
 export default function AuditML() {
-  const [selectedCompany, setSelectedCompany] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState("");
   const [jsonResult, setJsonResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +18,9 @@ export default function AuditML() {
     if (!selectedCompany) return;
     setLoading(true);
     try {
-      const response = await api.post('/audit-ml/predict/', { company_id: selectedCompany });
+      const response = await api.post("/audit-ml/predict/", {
+        company_id: selectedCompany,
+      });
       setJsonResult(response.data);
     } catch (err) {
       console.error("Erreur lors de la prédiction :", err);
@@ -31,10 +33,10 @@ export default function AuditML() {
         confidence: "High",
         features_impact: {
           sector_match: 0.95,
-          size_fit: 0.80,
-          growth_rate: 0.85
+          size_fit: 0.8,
+          growth_rate: 0.85,
         },
-        recommendation: "Qualified"
+        recommendation: "Qualified",
       });
     } finally {
       setLoading(false);
@@ -95,7 +97,9 @@ export default function AuditML() {
             className="bg-[#f59e0b] hover:bg-[#d97706] active:scale-[0.99] text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm whitespace-nowrap"
           >
             <Play className="w-4 h-4 fill-current" />
-            <span>{loading ? 'Calcul en cours...' : 'Tester la Prédiction'}</span>
+            <span>
+              {loading ? "Calcul en cours..." : "Tester la Prédiction"}
+            </span>
           </button>
         </div>
       </div>
@@ -107,11 +111,11 @@ export default function AuditML() {
           <h2 className="text-lg font-bold text-slate-900">Résultat JSON</h2>
         </div>
 
-        <div className="bg-[#0f172a] rounded-xl p-4 sm:p-6 overflow-x-auto min-h-[220px]">
+        <div className="bg-[#0f172a] rounded-xl p-4 sm:p-6 overflow-x-auto min-h-55">
           <pre className="font-mono text-xs sm:text-sm text-slate-300 leading-relaxed">
             {jsonResult
               ? JSON.stringify(jsonResult, null, 2)
-              : '// Sélectionnez une entreprise puis lancez une prédiction.'}
+              : "// Sélectionnez une entreprise puis lancez une prédiction."}
           </pre>
         </div>
       </div>

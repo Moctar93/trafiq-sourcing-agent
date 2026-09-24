@@ -111,3 +111,46 @@ class MLPredictResponseSerializer(serializers.Serializer):
     confidence = serializers.CharField()
     features_impact = serializers.DictField()
     recommendation = serializers.CharField()
+
+class CompanyCampaignDetailSerializer(serializers.ModelSerializer):
+    score = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Company
+        fields = ['id_company', 'name', 'website', 'sector', 'score']
+
+    def get_score(self, obj):
+        latest_score = obj.scores.first()
+        return latest_score.final_score if latest_score else 0
+
+
+class CampaignDetailSerializer(serializers.ModelSerializer):
+    profile_name = serializers.CharField(source='profile.name', read_only=True, default='Non défini')
+    total_prospects = serializers.SerializerMethodField()
+    qualified_prospects = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
+    prospects = CompanyCampaignDetailSerializer(source='companies', many=True, read_only=True)
+
+    class Meta:
+        model = Campaign
+        fields = [
+            'id_campaign', 'name', 'status', 'created_at',
+            'profile', 'profile_name', 'progress',
+            'total_prospects', 'qualified_prospects', 'prospects'
+        ]
+
+    def get_total_prospects(self, obj):
+        return obj.companies.count() if hasattr(obj, 'companies') else 0
+
+    def get_qualified_prospects(self, obj):
+        if not hasattr(obj, 'companies'):
+            return 0
+        return obj.companies.filter(scores__final_score__gte=70).distinct().count()
+
+    def get_progress(self, obj):
+        if obj.status == 'Terminée':
+            return 100
+        total = self.get_total_prospects(obj)
+        if total == 0:
+            return 0
+        return min(int((self.get_qualified_prospects(obj) / total) * 100), 100)

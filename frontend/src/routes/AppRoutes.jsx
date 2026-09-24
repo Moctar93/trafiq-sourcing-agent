@@ -8,6 +8,7 @@ import ImportProspects from '../pages/ImportProspects';
 import Campaigns from '../pages/Campaigns';
 import CreateCampaign from '../pages/CreateCampaign';
 import AuditML from '../pages/AuditML'
+import CampaignDetail from '../pages/CampaignDetail';
 
 export default function AppRoutes() {
     return (
@@ -20,6 +21,8 @@ export default function AppRoutes() {
                 <Route path='/campaigns' element={<Campaigns />} />
                 <Route path='/campaigns/create' element={<CreateCampaign />} />
                 <Route path='/audit' element={<AuditML />} />
+                <Route path='/campaigns/:id' element={<CampaignDetail />} />
+                
     
             </Route>
         </Routes>

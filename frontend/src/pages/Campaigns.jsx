@@ -168,7 +168,10 @@ const Campaigns = () => {
                     </span>
                   </td>
                   <td className="py-4 text-right">
-                    <button className="text-blue-600 hover:text-blue-800 font-bold text-sm cursor-pointer">
+                    <button
+                      onClick={() => navigate(`/campaigns/${item.id_campaign}`)}
+                      className="text-blue-600 hover:text-blue-800 font-bold text-sm cursor-pointer"
+                    >
                       Voir
                     </button>
                   </td>

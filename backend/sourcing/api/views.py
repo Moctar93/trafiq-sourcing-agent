@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -7,7 +7,7 @@ from sourcing.models import User, Company, SourceProfile, ModelVersion, Signal, 
 from .serializers import (
     UserSerializer, RegisterSerializer, CompanySerializer, SourceProfileSerializer,
     ModelVersionSerializer, SignalSerializer, ContactSerializer,
-    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer
+    CampaignSerializer, ActivitySerializer, ProspectScoreSerializer, ProspectImportSerializer, CampaignDetailSerializer
 )
 
 class ImportProspectsView(APIView):
@@ -200,3 +200,9 @@ class MLPredictView(APIView):
         }
 
         return Response(prediction_data, status=status.HTTP_200_OK)
+
+class CampaignDetailView(generics.RetrieveAPIView):
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignDetailSerializer
+    lookup_field = 'id_campaign'
+    permission_classes = [AllowAny]

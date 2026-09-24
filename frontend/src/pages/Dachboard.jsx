@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from 'react';
-// MODIFICATION 1 : Ajout de Loader2 pour l'indicateur de chargement
 import { Users, Gauge, Zap, Search, Filter, ExternalLink, ArrowUpRight, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+// ✅ IMPORTATION DE L'INSTANCE AXIOS SÉCURISÉE
+import api from '../api/axios';
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Création des états pour stocker les données de l'API, le chargement et les erreurs
+  // États pour stocker les données de l'API, le chargement et les erreurs
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Appel asynchrone à l'API Django REST lors du montage du composant
+  // Appel asynchrone à l'API Django REST via l'instance Axios
   useEffect(() => {
-    fetch('http://localhost:8000/api/companies/')
+    api.get('/companies/')
       .then((res) => {
-        if (!res.ok) throw new Error('Erreur lors de la récupération des données');
-        return res.json();
-      })
-      .then((data) => {
-        setCompanies(data); // Stockage des entreprises issues de MySQL
-        setLoading(false);  // Fin du chargement
+        setCompanies(res.data); // Axios place la réponse JSON dans res.data
+        setLoading(false);
       })
       .catch((err) => {
-        setError(err.message); // Capture de l'erreur réseau ou serveur
+        console.error('Erreur lors du chargement des entreprises :', err);
+        setError('Erreur lors de la récupération des données');
         setLoading(false);
       });
   }, []);
 
-  // Filtrage dynamique basé sur les données réelles au lieu du tableau statique
+  // Filtrage dynamique basé sur les données réelles
   const filteredCompanies = companies.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (item.sector && item.sector.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -63,7 +61,6 @@ export default function Dashboard() {
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Utilisation du nombre réel d'entreprises (companies.length) */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-start hover:border-slate-200 transition-all">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Prospects</p>
@@ -91,7 +88,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Calcul dynamique du nombre total de signaux cumulés */}
+        {/* Signaux Détectés */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-start hover:border-slate-200 transition-all">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Signaux Détectés</p>
@@ -121,7 +118,7 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Affichage conditionnel selon l'état (Chargement, Erreur ou Tableau) */}
+        {/* Contenu conditionnel */}
         {loading ? (
           <div className="p-12 flex justify-center items-center text-slate-400 gap-2">
             <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
@@ -142,24 +139,24 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
-                {/* Boucle map sur filteredCompanies avec les clés réelles du JSON (id_company, latest_signal, employee_count) */}
                 {filteredCompanies.map((item) => (
                   <tr key={item.id_company} className="hover:bg-slate-50/60 transition-colors">
                     <td className="py-3.5 px-6 font-semibold text-slate-900 flex items-center gap-3">
                       <span className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center shrink-0 border border-slate-200">
-                        {item.name.substring(0, 2).toUpperCase()}
+                        {item.name ? item.name.substring(0, 2).toUpperCase() : 'NA'}
                       </span>
                       {item.name}
                     </td>
                     <td className="py-3.5 px-4 text-slate-500 font-medium">{item.sector || 'N/A'}</td>
-                    <td className="py-3.5 px-4 text-slate-600 font-medium">{item.employee_count} sal.</td>
-                    <td className="py-3.5 px-4 text-slate-600 font-medium">{item.latest_signal}</td>
+                    <td className="py-3.5 px-4 text-slate-600 font-medium">{item.employee_count || 0} sal.</td>
+                    <td className="py-3.5 px-4 text-slate-600 font-medium">{item.latest_signal || 'Aucun'}</td>
                     <td className="py-3.5 px-6 text-right">
                       <Link
-                      to={`/prospects/${item.id_company}`}
+                        to={`/prospects/${item.id_company}`}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
                       >
                         <span>Détails</span>
-                        <ExternalLink className='w-3 h-3 text-slate-400' />
+                        <ExternalLink className="w-3 h-3 text-slate-400" />
                       </Link>
                     </td>
                   </tr>

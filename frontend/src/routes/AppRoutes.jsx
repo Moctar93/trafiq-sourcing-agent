@@ -10,12 +10,16 @@ import CreateCampaign from '../pages/CreateCampaign';
 import AuditML from '../pages/AuditML'
 import CampaignDetail from '../pages/CampaignDetail';
 import Login from '../pages/Login';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export default function AppRoutes() {
     return (
         <Routes>
-
+            {/* Route publique */}
             <Route path='/login' element={<Login />} />
+
+            {/* Route protégées : nécessite un token valide */}
+            <Route element={<ProtectedRoute />}>
 
             <Route element={<Layout />}>
                 <Route path='/' element={<Dashboard />} />
@@ -27,6 +31,7 @@ export default function AppRoutes() {
                 <Route path='/audit' element={<AuditML />} />
                 <Route path='/campaigns/:id' element={<CampaignDetail />} />              
             </Route>
+          </Route>
         </Routes>
     )
 }

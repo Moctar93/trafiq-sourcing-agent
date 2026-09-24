@@ -32,7 +32,7 @@ export default function Login() {
         if (response.data.refresh) {
           localStorage.setItem('refresh_token', response.data.refresh);
         }
-        navigate('/campaigns');
+        navigate('/');
       } else {
         setError("Jeton d'accès non reçu.");
       }

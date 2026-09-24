@@ -10,13 +10,32 @@ const api = axios.create({
 // Intercepteur pour ajouter le token JWT à chaque requête
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access_token");
+    // Vérification de 'token' (ou 'access_token' en fallback)
+    const token = localStorage.getItem("token") || localStorage.getItem("access_token");
     if (token) {
-      config.headers.Authorization = `Token ${token}`;
+      // Utilisation du format JWT officiel : Bearer <token>
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error),
+);
+
+// Intercepteur pour gérer l'expiration du token (erreur 401)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Si le token est expiré ou invalide, on nettoie le storage et on redirige vers /login
+      localStorage.removeItem("token");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default api;

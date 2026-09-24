@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import { Routes, Route  } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import Dashboard from '../pages/Dachboard';
@@ -9,10 +9,14 @@ import Campaigns from '../pages/Campaigns';
 import CreateCampaign from '../pages/CreateCampaign';
 import AuditML from '../pages/AuditML'
 import CampaignDetail from '../pages/CampaignDetail';
+import Login from '../pages/Login';
 
 export default function AppRoutes() {
     return (
         <Routes>
+
+            <Route path='/login' element={<Login />} />
+
             <Route element={<Layout />}>
                 <Route path='/' element={<Dashboard />} />
                 <Route path="/prospects/:id" element={<ProspectDetail />} />
@@ -21,9 +25,7 @@ export default function AppRoutes() {
                 <Route path='/campaigns' element={<Campaigns />} />
                 <Route path='/campaigns/create' element={<CreateCampaign />} />
                 <Route path='/audit' element={<AuditML />} />
-                <Route path='/campaigns/:id' element={<CampaignDetail />} />
-                
-    
+                <Route path='/campaigns/:id' element={<CampaignDetail />} />              
             </Route>
         </Routes>
     )

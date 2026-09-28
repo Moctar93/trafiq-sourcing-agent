@@ -156,17 +156,37 @@ class ProspectScore(models.Model):
     final_score = models.FloatField(default=0.0)
     confidence = models.FloatField(default=0.0)
     explanation = models.TextField(blank=True, null=True)
-    model_version = models.CharField(max_length=50, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    model = models.ForeignKey(ModelVersion, on_delete=models.CASCADE, db_column='id_model', related_name='scores')
-    profile = models.ForeignKey(SourceProfile, on_delete=models.CASCADE, db_column='id_profile', related_name='scores')
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, db_column='id_company', related_name='scores')
+    # Clés étrangères
+    model = models.ForeignKey(
+        ModelVersion,
+        on_delete=models.CASCADE,
+        db_column="id_model",
+        related_name="scores",
+    )
+    profile = models.ForeignKey(
+        SourceProfile,
+        on_delete=models.CASCADE,
+        db_column="id_profile",
+        related_name="scores",
+    )
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        db_column="id_company",
+        related_name="scores",
+    )
 
     class Meta:
-        db_table = 'PROSPECT_SCORE'
-        verbose_name = 'Score de prospect'
-        verbose_name_plural = 'Scores de prospects'
+        db_table = "PROSPECT_SCORE"
+        verbose_name = "Score de prospect"
+        verbose_name_plural = "Scores de prospects"
+        unique_together = ("company", "profile", "model")
 
     def __str__(self):
-        return f"Score {self.final_score} - {self.company.name}"
+        return (
+            f"Score {self.final_score} - {self.company.name} ({self.profile.name})"
+        )

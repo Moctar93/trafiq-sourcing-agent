@@ -45,12 +45,39 @@ class CampaignAdmin(admin.ModelAdmin):
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('company', 'user', 'status', 'created_at')
-    list_filter = ('status', 'created_at')
-    search_fields = ('company__name', 'user__username')
+    list_display = (
+        'company', 
+        'user', 
+        'status', 
+        'created_at',
+        )
+    list_filter = (
+        'status',
+        'created_at',
+        )
+    search_fields = (
+        'company__name',
+        'user__username',
+        )
 
 @admin.register(ProspectScore)
 class ProspectScoreAdmin(admin.ModelAdmin):
-    list_display = ('company', 'final_score', 'confidence', 'model_version', 'updated_at')
-    list_filter = ('model_version', 'updated_at')
-    search_fields = ('company__name',)
+    list_display = (
+        "id_score",
+        "company",
+        "profile",
+        "model",
+        "final_score",
+        "confidence",
+        "created_at",
+    )
+    list_filter = (
+        "model",
+        "profile",
+        "created_at",
+    )
+    search_fields = (
+        "company__name",
+        "profile__name",
+        "model__version_code",
+    )

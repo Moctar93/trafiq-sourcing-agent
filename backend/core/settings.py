@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party apps
     "rest_framework",
+    "drf_spectacular",
     "corsheaders",
     # Local apps
     "sourcing",
@@ -101,6 +102,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTING = {
+    'TITLE': 'Trafiq Sourcinf API',
+    'DESCRIPTION': 'Documentation de l\'API REST pour Trafiq Sourcing Agent',
+    'VERSION': '1.0.O',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 # Configuration JWT

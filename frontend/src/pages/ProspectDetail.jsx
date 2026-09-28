@@ -10,8 +10,21 @@ export default function ProspectDetail() {
   const [status, setStatus] = useState('Nouveau');
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/companies/${id}/`)
+    // 1. Récupération du token d'accès stocké localement
+    const token = localStorage.getItem("token") || localStorage.getItem("access_token") || sessionStorage.getItem("token");
+
+    // 2. Ajout du header Authorization à la requête fetch
+    fetch(`http://localhost:8000/api/companies/${id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }) // ou `Token ${token}` selon la configuration de SimpleJWT / Rest Framework
+      }
+    })
       .then((res) => {
+        if (res.status === 401) {
+          throw new Error("Session expirée ou non autorisée. Veuillez vous reconnecter.");
+        }
         if (!res.ok) throw new Error("Impossible de charger les détails du prospect.");
         return res.json();
       })
@@ -48,7 +61,7 @@ export default function ProspectDetail() {
     );
   }
 
-  // MODIFICATION : Extraction du score et de l'explication dynamiques depuis l'API MySQL
+  // Extraction du score et de l'explication dynamiques depuis l'API
   const currentScoreObj = company.scores && company.scores.length > 0 ? company.scores[0] : null;
   const finalScore = currentScoreObj ? Math.round(currentScoreObj.final_score) : 'N/A';
   const explanation = currentScoreObj ? currentScoreObj.explanation : null;
@@ -73,7 +86,6 @@ export default function ProspectDetail() {
               <Building2 className="w-7 h-7" />
             </div>
             <div>
-              {/* MODIFICATION : Nom dynamique de l'entreprise */}
               <h2 className="text-xl font-bold text-slate-900 leading-snug">{company.name}</h2>
               <p className="text-xs text-slate-400 font-medium">Fiche entreprise</p>
             </div>
@@ -82,19 +94,16 @@ export default function ProspectDetail() {
           <div className="space-y-4 text-sm divide-y divide-slate-100 pt-2">
             <div className="flex justify-between items-center pt-2">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">SECTEUR</span>
-              {/* MODIFICATION : Secteur dynamique */}
               <span className="font-bold text-slate-800">{company.sector || 'Non renseigné'}</span>
             </div>
 
             <div className="flex justify-between items-center pt-4">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">EFFECTIF</span>
-              {/* MODIFICATION : Effectif dynamique */}
               <span className="font-bold text-slate-800">{company.employee_count} employés</span>
             </div>
 
             <div className="flex justify-between items-center pt-4">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">SITE WEB</span>
-              {/* MODIFICATION : Site web dynamique (au lieu de la ville en dur) */}
               <span className="font-bold text-slate-800">{company.website || 'Non renseigné'}</span>
             </div>
           </div>
@@ -119,7 +128,6 @@ export default function ProspectDetail() {
           <div>
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">CONTACTS CLÉS</h3>
             <div className="space-y-3">
-              {/* MODIFICATION : Boucle sur les vrais contacts renvoyés par l'API */}
               {company.contacts && company.contacts.length > 0 ? (
                 company.contacts.map((contact) => (
                   <div key={contact.id_contact} className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-1">
@@ -134,7 +142,6 @@ export default function ProspectDetail() {
                   </div>
                 ))
               ) : (
-                /* MODIFICATION : Message clair si le tableau contacts est vide en BDD */
                 <p className="text-xs text-slate-400 italic">Aucun contact enregistré pour ce prospect.</p>
               )}
             </div>
@@ -143,7 +150,6 @@ export default function ProspectDetail() {
           <div>
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">SIGNAUX RÉCENTS</h3>
             <div className="space-y-3">
-              {/* MODIFICATION : Boucle sur les vrais signaux de la BDD */}
               {company.signals && company.signals.length > 0 ? (
                 company.signals.map((sig) => (
                   <div key={sig.id_signal} className="flex items-start gap-3 text-xs text-slate-700 font-medium">
@@ -152,7 +158,6 @@ export default function ProspectDetail() {
                   </div>
                 ))
               ) : (
-                /* MODIFICATION : Message si aucun signal en BDD */
                 <p className="text-xs text-slate-400 italic">Aucun signal récent détecté.</p>
               )}
             </div>
@@ -168,14 +173,12 @@ export default function ProspectDetail() {
 
           <div className="text-center py-2">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">FINAL SCORE</span>
-            {/* MODIFICATION : Score dynamisé (affiche finalScore calculé plus haut) */}
             <div className="inline-flex items-center justify-center bg-emerald-100/70 text-emerald-600 font-black text-5xl px-8 py-4 rounded-2xl w-full max-w-55">
               {finalScore}{typeof finalScore === 'number' ? '%' : ''}
             </div>
           </div>
 
           <div className="bg-blue-50/60 rounded-2xl p-5 space-y-4 border border-blue-100/50 text-xs">
-            {/* MODIFICATION : Affichage dynamique de l'explication du score */}
             {explanation ? (
               <div>
                 <h4 className="font-bold text-slate-900 mb-1 flex items-center gap-1.5">

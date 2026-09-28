@@ -12,6 +12,8 @@ class User(AbstractUser):
 
     class Meta:
         db_table = 'USER'
+        verbose_name = 'Utilisateur'
+        verbose_name_plural = 'Utilisateurs'
 
     def __str__(self):
         return f"{self.username} ({self.role})"
@@ -28,6 +30,8 @@ class Company(models.Model):
 
     class Meta:
         db_table = 'COMPANY'
+        verbose_name = 'Entreprise'
+        verbose_name_plural = 'Entreprises'
 
     def __str__(self):
         return self.name
@@ -52,6 +56,8 @@ class SourceProfile(models.Model):
 
     class Meta:
         db_table = 'SOURCE_PROFILE'
+        verbose_name = "Profil source"
+        verbose_name_plural = "Profils sources"
 
     def __str__(self):
         return self.name
@@ -66,6 +72,8 @@ class ModelVersion(models.Model):
 
     class Meta:
         db_table = 'MODEL_VERSION'
+        verbose_name = "Version de modèle"
+        verbose_name_plural = "Versions de modèles"
 
     def __str__(self):
         return self.version_code
@@ -82,6 +90,8 @@ class Signal(models.Model):
 
     class Meta:
         db_table = 'SIGNAL'
+        verbose_name = 'Signal'
+        verbose_name_plural = 'Signaux'
 
     def __str__(self):
         return f"{self.signal_type} - {self.company.name}"
@@ -114,6 +124,8 @@ class Campaign(models.Model):
 
     class Meta:
         db_table = 'CAMPAIGN'
+        verbose_name = 'Campagne'
+        verbose_name_plural = 'Campagnes'
 
     def __str__(self):
         return self.name
@@ -130,6 +142,8 @@ class Activity(models.Model):
 
     class Meta:
         db_table = 'ACTIVITY'
+        verbose_name = 'Activité'
+        verbose_name_plural = 'Activités'
 
 
 # Scoring des Prospects
@@ -151,6 +165,8 @@ class ProspectScore(models.Model):
 
     class Meta:
         db_table = 'PROSPECT_SCORE'
+        verbose_name = 'Score de prospect'
+        verbose_name_plural = 'Scores de prospects'
 
     def __str__(self):
         return f"Score {self.final_score} - {self.company.name}"

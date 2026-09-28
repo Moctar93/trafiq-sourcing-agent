@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Sliders, Upload, PlayCircle, Terminal, LogOut, User, Menu, X } from 'lucide-react';
 import logoTrafiq from '../../assets/logo-trafiq.jpeg';
@@ -7,9 +7,22 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setCurrentUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Erreur de lecture de l'utilisateur", e);
+      }
+    }
+  }, []);
+
+  // Libellés du menu traduits en français
   const navLinks = [
-    { label: 'Profil Sourcing', path: '/sourcing-profile', icon: Sliders },
+    { label: 'Profil de sourcing', path: '/sourcing-profile', icon: Sliders },
     { label: 'Import', path: '/import', icon: Upload },
     { label: 'Campagnes', path: '/campaigns', icon: PlayCircle },
     { label: 'Audit ML', path: '/audit', icon: Terminal },
@@ -18,20 +31,27 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
   const handleNavigate = (path) => {
     navigate(path);
-    setIsOpen(false); // Ferme le menu mobile lors d'un clic
+    setIsOpen(false);
   };
+
+  const displayName = currentUser?.first_name
+    ? `${currentUser.first_name} ${currentUser.last_name || ''}`.trim()
+    : currentUser?.username || 'Utilisateur';
+
+  const avatarInitial = displayName.charAt(0).toUpperCase();
 
   return (
     <header className="bg-white rounded-2xl p-4 shadow-sm mb-6 transition-all">
       <div className="flex items-center justify-between gap-4">
         {/* Brand & Navigation Bureau */}
         <div className="flex items-center gap-6">
-          {/* Logo & Titre */}
           <div 
             onClick={() => handleNavigate('/')} 
             className="flex items-center gap-3 cursor-pointer select-none"
@@ -50,7 +70,6 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Quick Nav Links (Bureau - visible uniquement sur grands écrans) */}
           <nav className="hidden lg:flex items-center gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100">
             {navLinks.map((link) => {
               const Icon = link.icon;
@@ -73,14 +92,14 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* Profil Utilisateur, Déconnexion & Bouton Burger */}
+        {/* Profil Utilisateur Dynamique, Déconnexion & Bouton Burger */}
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100">
             <div className="w-7 h-7 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xs shrink-0">
-              <User className="w-4 h-4" />
+              {currentUser ? avatarInitial : <User className="w-4 h-4" />}
             </div>
             <span className="text-xs font-semibold text-gray-800 hidden sm:inline">
-              Utilisateur
+              {displayName}
             </span>
           </div>
 
@@ -93,7 +112,6 @@ export default function Navbar() {
             <span className="hidden sm:inline">Déconnexion</span>
           </button>
 
-          {/* Bouton Burger (mobile/tablette uniquement) */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 border border-gray-100 transition-colors"
@@ -104,7 +122,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Navigation Mobile (Déroulante) */}
+      {/* Navigation Mobile */}
       {isOpen && (
         <nav className="lg:hidden mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
           {navLinks.map((link) => {

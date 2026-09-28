@@ -10,6 +10,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Fonction de gestion de la saisie utilisateur
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
@@ -17,13 +18,13 @@ export default function Login() {
     });
   };
 
+  // Soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      // Endpoint correspondant à sourcing/api/urls.py
       const response = await api.post('/auth/login/', credentials);
       
       const token = response.data.access;
@@ -32,6 +33,14 @@ export default function Login() {
         if (response.data.refresh) {
           localStorage.setItem('refresh_token', response.data.refresh);
         }
+
+        // Enregistrement des données utilisateur pour la Navbar
+        if (response.data.user) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        } else {
+          localStorage.setItem('user', JSON.stringify({ username: credentials.username }));
+        }
+
         navigate('/');
       } else {
         setError("Jeton d'accès non reçu.");

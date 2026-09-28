@@ -1,9 +1,0 @@
-/* Remplace l'icône burger par une flèche vers la gauche */
-a[data-widget="pushmenu"] .fa-bars::before {
-    content: "\f060" !important; /* Code FontAwesome fa-arrow-left */
-}
-
-/* Quand le volet est replié, oriente la flèche vers la droite */
-body.sidebar-collapse a[data-widget="pushmenu"] .fa-bars::before {
-    content: "\f061" !important; /* Code FontAwesome fa-arrow-right */
-}

@@ -19,6 +19,25 @@ const mockCompanies = [
   { id: 4, name: "TransAlpes Cargo" },
 ];
 
+// Dictionnaire de traduction pour les valeurs dynamiques de l'API
+const featureLabels = {
+  sector_match: "Correspondance Secteur",
+  size_fit: "Adéquation Taille",
+  growth_rate: "Taux de Croissance",
+};
+
+const confidenceLabels = {
+  High: "Élevée",
+  Medium: "Moyenne",
+  Low: "Faible",
+};
+
+const recommendationLabels = {
+  Qualified: "Qualifiée",
+  "Not Qualified": "Non Qualifiée",
+  Pending: "En attente",
+};
+
 export default function AuditML() {
   const [companies, setCompanies] = useState(mockCompanies);
   const [selectedCompany, setSelectedCompany] = useState("");
@@ -35,7 +54,7 @@ export default function AuditML() {
           setCompanies(response.data);
         }
       } catch (err) {
-        console.info("Utilisation des entreprises mockées (API non joignable).");
+        console.info("Utilisation des entreprises de démonstration (API non joignable).");
       }
     };
     fetchCompanies();
@@ -53,7 +72,7 @@ export default function AuditML() {
       setApiStatus({ online: true, message: "API 200 OK" });
     } catch (err) {
       console.error("Erreur lors de la prédiction :", err);
-      setApiStatus({ online: false, message: "Mode Fallback Actif" });
+      setApiStatus({ online: false, message: "Mode Démo Actif" });
       
       const selectedObj = companies.find((c) => String(c.id) === String(selectedCompany));
       setJsonResult({
@@ -81,15 +100,15 @@ export default function AuditML() {
 
   return (
     <div className="w-full space-y-6">
-      {/* 1. Header Card */}
+      {/* 1. Entête */}
       <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border border-slate-100">
         <div>
           <span className="text-xs font-bold tracking-wider text-amber-500 uppercase flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5"/>
-            TRAFIQ AI SOURCING AGENT
+            AGENT DE SOURCING TRAFIQ AI
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
-            ML Model Audit & Testing
+            Audit & Test du Modèle ML
           </h1>
         </div>
 
@@ -111,7 +130,7 @@ export default function AuditML() {
         </div>
       </div>
 
-      {/* 2. Test Rapide Card */}
+      {/* 2. Formulaire de test rapide */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
         <h2 className="text-lg font-bold text-slate-900">Test rapide</h2>
         <p className="text-sm text-slate-500 mt-1 mb-6">
@@ -154,7 +173,7 @@ export default function AuditML() {
         </div>
       </div>
 
-      {/* 3. Résultat Card */}
+      {/* 3. Résultat d'analyse */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -196,7 +215,7 @@ export default function AuditML() {
                 <div className="bg-slate-50 rounded-xl p-5 border border-slate-100 flex flex-col justify-between space-y-4">
                   <div>
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      Score Global
+                      SCORE GLOBAL
                     </span>
                     <div className="flex items-baseline gap-2 mt-2">
                       <span className="text-4xl font-extrabold text-slate-900">
@@ -211,7 +230,7 @@ export default function AuditML() {
                   <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
                     <span className="text-xs font-medium text-slate-500">Confiance</span>
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
-                      {jsonResult.confidence}
+                      {confidenceLabels[jsonResult.confidence] || jsonResult.confidence}
                     </span>
                   </div>
 
@@ -221,24 +240,25 @@ export default function AuditML() {
                     </span>
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
                       <CheckCircle2 className="w-3.5 h-3.5"/>
-                      {jsonResult.recommendation}
+                      {recommendationLabels[jsonResult.recommendation] || jsonResult.recommendation}
                     </span>
                   </div>
                 </div>
 
                 <div className="lg:col-span-2 bg-slate-50 rounded-xl p-5 border border-slate-100 flex flex-col justify-between">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 block">
-                    Impact des Features (Feature Importance)
+                    IMPACT DES CRITÈRES (PONDÉRATION)
                   </span>
 
                   <div className="space-y-3.5">
                     {jsonResult.features_impact &&
                       Object.entries(jsonResult.features_impact).map(([key, value]) => {
                         const percent = Math.round(value * 100);
+                        const label = featureLabels[key] || key.replace("_", " ");
                         return (
                           <div key={key} className="space-y-1">
                             <div className="flex justify-between text-xs font-medium text-slate-700">
-                              <span className="capitalize">{key.replace("_", " ")}</span>
+                              <span>{label}</span>
                               <span className="font-bold">{percent}%</span>
                             </div>
                             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">

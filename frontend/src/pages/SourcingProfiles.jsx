@@ -81,11 +81,11 @@ export default function SourcingProfile() {
 
   return (
     <form onSubmit={handleSave} className="w-full space-y-6">
-      {/* Header Responsive */}
+      {/* En-tête Responsive */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Trafiq AI Sourcing Agent
+            Agent de Sourcing Trafiq AI
           </h1>
           <p className="text-xs sm:text-sm text-blue-100 mt-1">
             Configurez votre profil de sourcing intelligent
@@ -94,7 +94,7 @@ export default function SourcingProfile() {
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl shadow-lg transition-all text-sm shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl shadow-lg transition-all text-sm shrink-0 cursor-pointer disabled:opacity-50"
         >
           {saving ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -230,11 +230,13 @@ export default function SourcingProfile() {
         </div>
 
         <div className="space-y-5">
-          {/* Fit Slider */}
+          {/* Slider Pertinence (Fit) */}
           <div>
             <div className="flex justify-between items-start mb-2">
               <div>
-                <span className="font-bold text-sm text-slate-900">Fit</span>
+                <span className="font-bold text-sm text-slate-900">
+                  Pertinence (Fit)
+                </span>
                 <p className="text-xs text-slate-400">
                   Adéquation avec votre solution
                 </p>
@@ -253,11 +255,13 @@ export default function SourcingProfile() {
             />
           </div>
 
-          {/* Need Slider */}
+          {/* Slider Besoin (Need) */}
           <div>
             <div className="flex justify-between items-start mb-2">
               <div>
-                <span className="font-bold text-sm text-slate-900">Need</span>
+                <span className="font-bold text-sm text-slate-900">
+                  Besoin (Need)
+                </span>
                 <p className="text-xs text-slate-400">
                   Besoin exprimé ou latent
                 </p>
@@ -276,12 +280,12 @@ export default function SourcingProfile() {
             />
           </div>
 
-          {/* Intent Slider */}
+          {/* Slider Intention d'achat (Intent) */}
           <div>
             <div className="flex justify-between items-start mb-2">
               <div>
                 <span className="font-bold text-sm text-slate-900">
-                  Intent
+                  Intention d'achat (Intent)
                 </span>
                 <p className="text-xs text-slate-400">
                   Intention d'achat détectée
@@ -303,12 +307,12 @@ export default function SourcingProfile() {
         </div>
       </div>
 
-      {/* Bouton de bas de page (Mobile) */}
+      {/* Bouton bas de page (Mobile) */}
       <div className="block sm:hidden pt-2">
         <button
           type="submit"
           disabled={saving}
-          className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl shadow-lg transition-all text-sm cursor-pointer"
+          className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl shadow-lg transition-all text-sm cursor-pointer disabled:opacity-50"
         >
           {saving ? (
             <Loader2 className="w-4 h-4 animate-spin" />

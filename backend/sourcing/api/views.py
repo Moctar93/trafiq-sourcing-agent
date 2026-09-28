@@ -112,9 +112,10 @@ class ProspectScoreViewSet(viewsets.ModelViewSet):
 
 class CampaignListView(APIView):
     def get(self, request):
-        campaigns = Campaign.objects.select_related('profile').all().order_by('-created_at')
-        serializer = CampaignSerializer(campaigns, many=True)
-        active_count = campaigns.filter(status='En cours').count()
+        queryset = Campaign.objects.select_related('profile').all().order_by('-created_at')
+        active_count = Campaign.objects.filter(status='En cours').count()
+        serializer = CampaignSerializer(queryset, many=True)
+        
 
         return Response({
             'active_campaigns_count': active_count,

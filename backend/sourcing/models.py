@@ -161,7 +161,7 @@ class ProspectScore(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # Clés étrangères
-    model = models.ForeignKey(
+    model_version = models.ForeignKey(
         ModelVersion,
         on_delete=models.CASCADE,
         db_column="id_model",
@@ -184,7 +184,7 @@ class ProspectScore(models.Model):
         db_table = "PROSPECT_SCORE"
         verbose_name = "Score de prospect"
         verbose_name_plural = "Scores de prospects"
-        unique_together = ("company", "profile", "model")
+        unique_together = ("company", "profile", "model_version")
 
     def __str__(self):
         return (

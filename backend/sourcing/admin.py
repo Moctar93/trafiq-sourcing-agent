@@ -66,13 +66,13 @@ class ProspectScoreAdmin(admin.ModelAdmin):
         "id_score",
         "company",
         "profile",
-        "model",
+        "model_version",
         "final_score",
         "confidence",
         "created_at",
     )
     list_filter = (
-        "model",
+        "model_version",
         "profile",
         "created_at",
     )

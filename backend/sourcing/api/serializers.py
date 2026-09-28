@@ -38,9 +38,29 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = ['id_contact', 'first_name', 'last_name', 'position', 'email', 'linkedin_url']
 
 class ProspectScoreSerializer(serializers.ModelSerializer):
+    model_version_code = serializers.CharField(
+        source="model_version.version_code", read_only=True
+    )
+
     class Meta:
         model = ProspectScore
-        fields = ['id_score', 'fit_score', 'need_score', 'intent_score', 'opportunity_score', 'final_score', 'confidence', 'explanation', 'updated_at']
+        fields = [
+            "id_score",
+            "fit_score",
+            "need_score",
+            "intent_score",
+            "opportunity_score",
+            "final_score",
+            "confidence",
+            "explanation",
+            "model_version",
+            "model_version_code",
+            "profile",
+            "company",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id_score", "created_at", "updated_at"]
 
 class CompanySerializer(serializers.ModelSerializer):
     signals = SignalSerializer(many=True, read_only=True)

@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 from sourcing.models import (
     User, Company, SourceProfile, ModelVersion, 
     Signal, Contact, Campaign, Activity, ProspectScore
@@ -14,14 +15,33 @@ from .serializers import (
 
 # --- VUES PUBLIQUES ---
 
+# N'oublie pas d'ajouter cet import en haut du fichier views.py :
+from rest_framework_simplejwt.tokens import RefreshToken
+
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Utilisateur créé avec succès"}, status=status.HTTP_201_CREATED)
+            user = serializer.save()
+            
+            # Génération directe des jetons JWT
+            refresh = RefreshToken.for_user(user)
+            
+            return Response({
+                "message": "Utilisateur créé avec succès",
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email
+                },
+                "tokens": {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                }
+            }, status=status.HTTP_201_CREATED)
+            
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

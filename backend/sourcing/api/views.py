@@ -48,6 +48,9 @@ class RegisterView(APIView):
 # --- VUES PROTÉGÉES (Héritent automatiquement de IsAuthenticated dans settings.py) ---
 
 class ImportProspectsView(APIView):
+
+    serializer_class = ProspectImportSerializer
+    
     def post(self, request, *args, **kwargs):
         prospects_data = request.data.get('prospects', [])
         serializer = ProspectImportSerializer(data=prospects_data, many=True)

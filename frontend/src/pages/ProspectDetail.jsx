@@ -7,18 +7,15 @@ export default function ProspectDetail() {
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [status, setStatus] = useState('Nouveau');
 
   useEffect(() => {
-    // 1. Récupération du token d'accès stocké localement
     const token = localStorage.getItem("token") || localStorage.getItem("access_token") || sessionStorage.getItem("token");
 
-    // 2. Ajout du header Authorization à la requête fetch
     fetch(`http://localhost:8000/api/companies/${id}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` }) // ou `Token ${token}` selon la configuration de SimpleJWT / Rest Framework
+        ...(token && { 'Authorization': `Bearer ${token}` })
       }
     })
       .then((res) => {
@@ -61,7 +58,6 @@ export default function ProspectDetail() {
     );
   }
 
-  // Extraction du score et de l'explication dynamiques depuis l'API
   const currentScoreObj = company.scores && company.scores.length > 0 ? company.scores[0] : null;
   const finalScore = currentScoreObj ? Math.round(currentScoreObj.final_score) : 'N/A';
   const explanation = currentScoreObj ? currentScoreObj.explanation : null;
@@ -106,20 +102,6 @@ export default function ProspectDetail() {
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">SITE WEB</span>
               <span className="font-bold text-slate-800">{company.website || 'Non renseigné'}</span>
             </div>
-          </div>
-
-          <div className="pt-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">STATUT</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer shadow-sm"
-            >
-              <option value="Nouveau">Nouveau</option>
-              <option value="En cours">En cours</option>
-              <option value="Qualifié">Qualifié</option>
-              <option value="Converti">Converti</option>
-            </select>
           </div>
         </div>
 
@@ -191,10 +173,6 @@ export default function ProspectDetail() {
               <p className="text-slate-500 italic">Aucune explication générée pour le moment.</p>
             )}
           </div>
-
-          <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-amber-500/20 transition-all text-sm">
-            Contacter ce prospect
-          </button>
         </div>
 
       </div>

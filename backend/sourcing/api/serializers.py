@@ -35,7 +35,7 @@ class SignalSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ['id_contact', 'first_name', 'last_name', 'position', 'email', 'linkedin_url']
+        fields = ['id_contact', 'first_name', 'last_name', 'position', 'email', 'linkedin_url', 'company']
 
 class ProspectScoreSerializer(serializers.ModelSerializer):
     model_version_code = serializers.CharField(

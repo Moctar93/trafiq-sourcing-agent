@@ -30,7 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class SignalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Signal
-        fields = ['id_signal', 'signal_type', 'value', 'source', 'detected_at']
+        fields = ['id_signal', 'signal_type', 'value', 'source', 'detected_at', 'company']
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:

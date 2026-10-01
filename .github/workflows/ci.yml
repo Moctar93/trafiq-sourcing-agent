@@ -2,9 +2,9 @@ name: Trafiq Sourcing CI/CD Pipeline
 
 on:
   push:
-    branches: [ "develop", "main" ]
+    branches: ["develop", "main"]
   pull_request:
-    branches: [ "develop", "main" ]
+    branches: ["develop", "main"]
 
 jobs:
   backend-tests:
@@ -17,6 +17,8 @@ jobs:
         env:
           MYSQL_DATABASE: trafiq_db
           MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_USER: trafiq_user
+          MYSQL_PASSWORD: trafiq_password
         ports:
           - 3306:3306
         options: >-
@@ -32,21 +34,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
 
+      - name: Grant privileges on test database
+        run: |
+          mysql -h 127.0.0.1 -u root -prootpassword -e "GRANT ALL PRIVILEGES ON \`test_%\`.* TO 'trafiq_user'@'%'; FLUSH PRIVILEGES;"
+
       - name: Run Backend Tests
         env:
           DB_HOST: 127.0.0.1
-          DB_NAME: trafiq_db
-          DB_USER: root
-          DB_PASSWORD: rootpassword
-          SECRET_KEY: 'ci-secret-key-for-testing'
-          DEBUG: 'True'
+          MYSQL_DATABASE: trafiq_db
+          MYSQL_USER: trafiq_user
+          MYSQL_PASSWORD: trafiq_password
+          SECRET_KEY: "ci-secret-key-for-testing"
+          DEBUG: "True"
         run: |
           cd backend
           python manage.py test sourcing.tests --noinput
@@ -62,7 +68,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install Frontend Dependencies
         run: |

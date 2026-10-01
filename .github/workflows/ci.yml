@@ -17,8 +17,6 @@ jobs:
         env:
           MYSQL_DATABASE: trafiq_db
           MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_USER: trafiq_user
-          MYSQL_PASSWORD: trafiq_password
         ports:
           - 3306:3306
         options: >-
@@ -44,9 +42,9 @@ jobs:
       - name: Run Backend Tests
         env:
           DB_HOST: 127.0.0.1
-          DB_NAME: test_trafiq_db
-          DB_USER: trafiq_user
-          DB_PASSWORD: trafiq_password
+          DB_NAME: trafiq_db
+          DB_USER: root
+          DB_PASSWORD: rootpassword
           SECRET_KEY: 'ci-secret-key-for-testing'
           DEBUG: 'True'
         run: |

@@ -79,7 +79,7 @@ docker compose up -d --build
 
 - **Frontend React :** `http://localhost:5173`
 - **API Backend Django :** `http://localhost:8000/api/`
-- **Documentation Swagger UI :** `http://localhost:8000/docs/`
+- **Documentation Swagger UI :** `http://localhost:8000/api/docs/`
 - **Back-office Admin Django :** `http://localhost:8000/admin/`
 
 ---
